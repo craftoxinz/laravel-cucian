@@ -14,15 +14,16 @@
     <div class="card card-stacked">
       <!-- Top Accent Bar Biru -->
       <div class="card-status-top bg-primary"></div>
-      
+
       <div class="card-header">
         <h3 class="card-title text-heading">Form User Baru</h3>
       </div>
-      
-      <form action="{{ route('users.store') }}" method="POST" autocomplete="off">
+
+      <!-- Ditambahkan enctype="multipart/form-data" agar bisa upload foto -->
+      <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
         @csrf
         <div class="card-body">
-          
+
           <!-- Input Nama -->
           <div class="mb-3">
             <label class="form-label required">Nama Lengkap</label>
@@ -37,7 +38,7 @@
               <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
           </div>
-          
+
           <!-- Input Email -->
           <div class="mb-3">
             <label class="form-label required">Alamat Email</label>
@@ -52,7 +53,7 @@
               <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
           </div>
-          
+
           <!-- Input Role Dropdown -->
           <div class="mb-3">
             <label class="form-label required">Hak Akses (Role)</label>
@@ -71,7 +72,22 @@
               <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
           </div>
-          
+
+          <!-- Input Foto Profil (Opsional) -->
+          <div class="mb-3">
+            <label class="form-label">Foto Profil <span class="text-secondary font-weight-normal">(Opsional)</span></label>
+            <div class="input-icon">
+              <span class="input-icon-addon">
+                <i class="ti ti-photo text-secondary fs-2"></i>
+              </span>
+              <input type="file" name="gambar" class="form-control @error('gambar') is-invalid @enderror" accept="image/*">
+            </div>
+            <small class="form-hint text-secondary mt-1">Format: JPG, JPEG, PNG, WEBP. Maksimal 2MB.</small>
+            @error('gambar')
+              <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+          </div>
+
           <!-- Input Password -->
           <div class="mb-3">
             <label class="form-label required">Password</label>
@@ -85,7 +101,7 @@
               <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
           </div>
-          
+
           <!-- Input Konfirmasi Password -->
           <div class="mb-0">
             <label class="form-label required">Konfirmasi Password</label>
@@ -96,9 +112,9 @@
               <input type="password" name="password_confirmation" class="form-control" placeholder="Ulangi password" required>
             </div>
           </div>
-          
+
         </div>
-        
+
         <!-- Action Buttons -->
         <div class="card-footer bg-transparent d-flex gap-2 justify-content-end border-top">
           <a href="{{ route('users.index') }}" class="btn btn-ghost-secondary" style="border-radius: 6px;">

@@ -17,6 +17,7 @@
       <thead>
         <tr>
           <th class="w-1 text-center">#</th>
+          <th>Foto</th>
           <th>Nama Lengkap</th>
           <th>Alamat Email</th>
           <th>Hak Akses (Role)</th>
@@ -29,22 +30,32 @@
         <tr>
           <!-- No Urut -->
           <td class="text-center text-secondary small">{{ $users->firstItem() + $i }}</td>
-          
-          <!-- Avatar Inisial & Nama User -->
+
+          <!-- Foto Profil / Avatar -->
           <td>
-            <div class="d-flex align-items-center gap-2">
-              <div class="avatar avatar-xs bg-primary-lt text-primary font-weight-bold" style="border-radius: 6px;">
+            @if(!empty($user->gambar))
+              <img src="{{ asset('storage/' . $user->gambar) }}"
+                   alt="{{ $user->name }}"
+                   class="avatar avatar-sm object-cover"
+                   style="border-radius: 6px; width: 36px; height: 36px;">
+            @else
+              <!-- Fallback: Menggunakan Inisial Nama Jika Gambar Kosong -->
+              <div class="avatar avatar-sm bg-primary-lt text-primary font-weight-bold" style="border-radius: 6px; width: 36px; height: 36px;">
                 {{ strtoupper(substr($user->name, 0, 1)) }}
               </div>
-              <div>
-                <div class="font-weight-medium text-heading">{{ $user->name }}</div>
-                @if($user->id === auth()->id())
+            @endif
+          </td>
+
+          <!-- Nama User -->
+          <td>
+            <div>
+              <div class="font-weight-medium text-heading">{{ $user->name }}</div>
+              @if($user->id === auth()->id())
                 <span class="badge bg-green-lt text-green rounded-pill" style="font-size: 9px; padding: 1px 6px;">Anda</span>
-                @endif
-              </div>
+              @endif
             </div>
           </td>
-          
+
           <!-- Email -->
           <td class="text-secondary small">
             <div class="d-flex align-items-center gap-1">
@@ -52,14 +63,14 @@
               {{ $user->email }}
             </div>
           </td>
-          
+
           <!-- Role Badge (Admin Purple, Kasir Blue) -->
           <td>
             <span class="badge {{ $user->role->name === 'admin' ? 'bg-purple' : 'bg-blue' }}-lt rounded-pill px-2.5 py-1 font-weight-medium">
               <i class="ti ti-user-shield me-1 fs-3"></i> {{ $user->role->label }}
             </span>
           </td>
-          
+
           <!-- Status Aktif / Nonaktif -->
           <td>
             @if($user->is_active)
@@ -72,7 +83,7 @@
             </span>
             @endif
           </td>
-          
+
           <!-- Tombol Aksi -->
           <td class="text-center">
             <div class="d-flex align-items-center justify-content-center gap-2">
@@ -94,7 +105,7 @@
         @empty
         <!-- Tampilan Interaktif Saat Data User Kosong -->
         <tr>
-          <td colspan="6" class="text-center py-5">
+          <td colspan="7" class="text-center py-5">
             <div class="empty">
               <div class="empty-icon">
                 <div class="avatar avatar-md bg-muted-lt" style="border-radius: 10px;">
@@ -110,7 +121,7 @@
       </tbody>
     </table>
   </div>
-  
+
   <!-- ===== SECTION PAGINATION ===== -->
   @if($users->hasPages())
   <div class="card-footer d-flex align-items-center justify-content-between border-top">
