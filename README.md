@@ -49,7 +49,7 @@ Aplikasi manajemen laundry berbasis web menggunakan **Laravel 11** dan **Tabler 
 ```bash
 # 1. Clone repository
 git clone https://github.com/craftoxinz/laravel-cucian.git
-cd LaundryKu
+cd laravel-cucian
 
 # 2. Install dependencies
 composer install
