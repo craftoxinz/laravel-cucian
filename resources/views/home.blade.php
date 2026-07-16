@@ -17,6 +17,7 @@
                     colors: {
                         ink: '#1E2A3A',
                         soap: '#00398c',
+                        water: '#2671DE',
                         sun: '#F2B705',
                         tagred: '#D64545',
                         foam: '#DCEFEA',
@@ -36,23 +37,37 @@
             background-color: #F3F6F5;
         }
 
-        /* Price-tag / garment-tag shape with a punched hole */
-        .tag {
+        .hero-section {
+            background-image: url('/Background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             position: relative;
-            clip-path: polygon(26px 0, 100% 0, 100% 100%, 26px 100%, 0 50%);
         }
 
-        .tag::before {
-            content: '';
+        .hero-gradient {
             position: absolute;
-            left: 11px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 7px;
-            height: 7px;
-            border-radius: 9999px;
-            background: #F3F6F5;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to bottom, transparent 0%, #F3F6F5 100%);
+            pointer-events: none;
+            z-index: 1;
         }
+
+        .hero-stats-wrap {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Price-tag / garment-tag shape with a real transparent hole */
+        .tag {
+            clip-path: polygon(26px 0, 100% 0, 100% 100%, 26px 100%, 0 50%);
+            -webkit-mask: radial-gradient(circle 4px at 11px 50%, transparent 3.2px, #000 3.2px);
+            mask: radial-gradient(circle 4px at 11px 50%, transparent 3.2px, #000 3.2px);
+        }
+        
 
         /* Receipt-style dashed perforation */
         .perforated {
@@ -126,16 +141,10 @@
 </header>
 
 <!-- ============ HERO ============ -->
-<section class="relative overflow-hidden">
+<section class="relative overflow-hidden hero-section">
     <div class="max-w-6xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-16 grid md:grid-cols-2 gap-12 items-center">
 
         <div>
-            <div
-                class="tag inline-flex items-center bg-sun text-ink font-mono text-xs font-semibold pl-6 pr-4 py-2 mb-6"
-                style="--hole:#F2B705">
-                MULAI Rp7.000&nbsp;/&nbsp;KG
-            </div>
-
             <h1 class="font-display font-700 text-4xl sm:text-5xl leading-[1.08] tracking-tight mb-5">
                 Cucian numpuk,<br>
                 <span class="text-soap">beres</span> tanpa ribet.
@@ -146,11 +155,18 @@
                 Kamu nggak perlu angkat ember, apalagi ngantre di kios.
             </p>
 
-            <div class="flex flex-wrap gap-3 mb-10">
-                <a href="{{ route('login')  }}"
-                   class="bg-ink text-white text-sm font-semibold px-6 py-3.5 rounded-full hover:bg-soap transition">
-                    Masuk ke Aplikasi
-                </a>
+            <div class="flex flex-wrap items-center gap-3 mb-10">
+                <div class="relative">
+                    <a href="{{ route('login') }}"
+                       class="bg-ink text-white text-sm font-semibold px-6 py-3.5 rounded-full hover:bg-soap transition">
+                        Masuk ke Aplikasi
+                    </a>
+                    <div
+                        class="tag absolute -top-0 -right-3/4 bg-sun text-ink font-mono text-[10px] font-semibold pl-5 pr-3 py-1.5"
+                        style="--hole:#F2B705">
+                        MULAI Rp7.000&nbsp;/&nbsp;KG
+                    </div>
+                </div>
             </div>
 
             <div class="flex items-center gap-4 text-sm text-ink/60">
@@ -163,19 +179,8 @@
             </div>
         </div>
 
-        <!-- Website mockup -->
+        <!-- Website mockup (original browser dashboard) -->
         <div class="relative flex justify-center md:justify-end">
-
-            <div
-                class="tag absolute -left-3 top-4 bg-white shadow-md pl-5 pr-4 py-2 text-xs font-mono font-semibold text-ink z-20 hidden sm:block"
-                style="--hole:#ffffff">
-                Kurir tiba 15 menit
-            </div>
-            <div
-                class="tag absolute -right-3 bottom-6 bg-white shadow-md pl-5 pr-4 py-2 text-xs font-mono font-semibold text-soap z-20 hidden sm:block"
-                style="--hole:#ffffff">
-                Deterjen eco-friendly
-            </div>
 
             <div
                 class="relative w-full max-w-[480px] bg-white rounded-2xl border border-ink/10 shadow-2xl overflow-hidden">
@@ -220,7 +225,7 @@
 
                     <!-- main content -->
                     <div class="flex-1 p-5">
-                        <p class="text-xs text-ink/50 mb-0.5">Halo, Dinda 👋</p>
+                        <p class="text-xs text-ink/50 mb-0.5">Halo, Dinda</p>
                         <p class="font-display font-600 text-base mb-4">Jemput cucianmu hari ini?</p>
 
                         <div class="bg-linen rounded-xl p-4 mb-3">
@@ -274,23 +279,25 @@
         </div>
     </div>
 
-    <!-- stat stubs -->
-    <div class="max-w-6xl mx-auto px-5 md:px-8">
-        <div class="grid grid-cols-2 md:grid-cols-4 border-t border-b border-ink/10">
-            <div class="stub py-6 text-center">
-                <p class="font-display font-700 text-2xl">500rb+</p>
+    <div class="hero-gradient"></div>
+
+    <!-- stats with colored pill backgrounds -->
+    <div class="hero-stats-wrap max-w-6xl mx-auto px-5 md:px-8 pb-10 md:pb-14">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            <div class="bg-white rounded-2xl border border-ink/10 shadow-sm py-5 text-center">
+                <p class="font-display font-700 text-2xl text-ink">500rb+</p>
                 <p class="text-xs text-ink/60 mt-1">Kg dicuci / bulan</p>
             </div>
-            <div class="stub py-6 text-center">
-                <p class="font-display font-700 text-2xl">1.200+</p>
+            <div class="bg-white rounded-2xl border border-ink/10 shadow-sm py-5 text-center">
+                <p class="font-display font-700 text-2xl text-ink">1.200+</p>
                 <p class="text-xs text-ink/60 mt-1">Kurir aktif</p>
             </div>
-            <div class="stub py-6 text-center">
-                <p class="font-display font-700 text-2xl">4.9/5</p>
+            <div class="bg-white rounded-2xl border border-ink/10 shadow-sm py-5 text-center">
+                <p class="font-display font-700 text-2xl text-ink">4.9/5</p>
                 <p class="text-xs text-ink/60 mt-1">Rating pengguna</p>
             </div>
-            <div class="stub py-6 text-center">
-                <p class="font-display font-700 text-2xl">24 Jam</p>
+            <div class="bg-white rounded-2xl border border-ink/10 shadow-sm py-5 text-center">
+                <p class="font-display font-700 text-2xl text-ink">24 Jam</p>
                 <p class="text-xs text-ink/60 mt-1">Layanan express</p>
             </div>
         </div>
