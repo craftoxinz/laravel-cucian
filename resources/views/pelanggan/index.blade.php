@@ -24,7 +24,7 @@
             <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan nama atau nomor telepon..." value="{{ request('search') }}">
           </div>
         </div>
-        
+
         <!-- Tombol Cari & Reset -->
         <div class="col-12 col-md-auto ms-auto d-flex gap-2">
           <button type="submit" class="btn btn-outline-primary d-flex align-items-center gap-1 flex-fill" style="border-radius: 6px;">
@@ -58,7 +58,7 @@
         <tr>
           <!-- No Urut -->
           <td class="text-center text-secondary small">{{ $pelanggan->firstItem() + $i }}</td>
-          
+
           <!-- Nama Pelanggan dengan Inisial Icon -->
           <td>
             <div class="d-flex align-items-center gap-2">
@@ -68,7 +68,7 @@
               <div class="font-weight-medium text-heading">{{ $p->nama }}</div>
             </div>
           </td>
-          
+
           <!-- Nomor Telepon -->
           <td class="text-secondary small">
             @if($p->telepon)
@@ -80,7 +80,7 @@
             <span class="text-muted">-</span>
             @endif
           </td>
-          
+
           <!-- Alamat (Dibatasi Karakter secara Estetis) -->
           <td class="text-secondary small text-truncate" style="max-width: 250px;">
             @if($p->alamat)
@@ -92,27 +92,26 @@
             <span class="text-muted">-</span>
             @endif
           </td>
-          
+
           <!-- Status Total Order Badge -->
           <td class="text-center">
             <span class="badge bg-blue-lt text-blue rounded-pill px-2.5 py-1 font-weight-medium">
               <i class="ti ti-receipt me-1 fs-3"></i> {{ $p->orders_count }} Order
             </span>
           </td>
-          
+
           <!-- Tombol Aksi -->
           <td class="text-center">
             <div class="d-flex align-items-center justify-content-center gap-2">
               <a href="{{ route('pelanggan.edit', $p) }}" class="btn btn-sm btn-icon btn-outline-primary" title="Ubah Data" style="border-radius: 6px;">
                 <i class="ti ti-edit fs-2"></i>
               </a>
-              <form action="{{ route('pelanggan.destroy', $p) }}" method="POST" class="d-inline"
-                    onsubmit="return confirm('Hapus pelanggan {{ $p->nama }}?')">
-                @csrf @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-icon btn-outline-danger" title="Hapus Data" style="border-radius: 6px;">
-                  <i class="ti ti-trash fs-2"></i>
-                </button>
-              </form>
+              <form action="{{ route('pelanggan.destroy', $p) }}" method="POST" class="d-inline form-delete-pelanggan">
+                    @csrf @method('DELETE')
+                    <button type="button" class="btn btn-sm btn-icon btn-outline-danger btn-delete-pelanggan" title="Hapus Data" style="border-radius: 6px;" data-nama="{{ $p->nama }}">
+                        <i class="ti ti-trash fs-2"></i>
+                    </button>
+            </form>
             </div>
           </td>
         </tr>
@@ -147,3 +146,45 @@
   @endif
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.btn-delete-pelanggan').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const form = btn.closest('form.form-delete-pelanggan');
+      const nama = btn.dataset.nama;
+
+      Swal.fire({
+        title: 'Hapus Pelanggan?',
+        html: `Yakin ingin menghapus <b>${nama}</b>?<br>Data yang sudah dihapus tidak dapat dikembalikan.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#d63939',
+        cancelButtonColor: '#626976',
+        reverseButtons: true,
+        focusCancel: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  });
+
+  @if(session('success'))
+    Swal.fire({
+      title: 'Berhasil!',
+      text: @json(session('success')),
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#2fb344',
+      timer: 2500,
+      timerProgressBar: true,
+    });
+  @endif
+});
+</script>
+@endpush

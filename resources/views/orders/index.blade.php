@@ -22,7 +22,7 @@
             <input type="text" name="search" class="form-control" placeholder="Cari kode order atau nama pelanggan..." value="{{ request('search') }}">
           </div>
         </div>
-        
+
         <div class="col-6 col-sm-4 col-md-2.5 col-lg-2">
           <select name="status" class="form-select">
             <option value="">Semua Status</option>
@@ -32,7 +32,7 @@
             <option value="diambil" {{ request('status')=='diambil' ? 'selected' : '' }}>Diambil</option>
           </select>
         </div>
-        
+
         <div class="col-6 col-sm-4 col-md-2.5 col-lg-2">
           <select name="status_bayar" class="form-select">
             <option value="">Semua Bayar</option>
@@ -40,7 +40,7 @@
             <option value="lunas" {{ request('status_bayar')=='lunas' ? 'selected' : '' }}>Lunas</option>
           </select>
         </div>
-        
+
         <div class="col-12 col-sm-4 col-md-auto ms-auto d-flex gap-2">
           <button type="submit" class="btn btn-icon btn-outline-primary flex-fill" title="Terapkan Filter" style="min-width: 40px;">
             <i class="ti ti-filter fs-2"></i>
@@ -154,3 +154,21 @@
   @endif
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  @if(session('success'))
+    Swal.fire({
+      title: 'Berhasil!',
+      text: @json(session('success')),
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#2fb344',
+      timer: 2500,
+      timerProgressBar: true,
+    });
+  @endif
+});
+</script>
+@endpush

@@ -12,7 +12,7 @@
 <form action="{{ route('orders.store') }}" method="POST" id="orderForm" autocomplete="off">
   @csrf
   <div class="row row-cards">
-    
+
     <div class="col-lg-5">
       <div class="card mb-3">
         <div class="card-status-top bg-primary"></div>
@@ -20,7 +20,7 @@
           <h3 class="card-title text-heading">Informasi Order</h3>
         </div>
         <div class="card-body">
-          
+
           <div class="mb-3">
             <label class="form-label required">Pelanggan</label>
             <div class="input-icon">
@@ -45,7 +45,7 @@
               </a>
             </div>
           </div>
-          
+
           <div class="mb-3">
             <label class="form-label required">Estimasi Selesai</label>
             <div class="input-icon">
@@ -59,12 +59,12 @@
               <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
           </div>
-          
+
           <div class="mb-0">
             <label class="form-label">Catatan Tambahan</label>
             <textarea name="catatan" class="form-control" rows="3" placeholder="Contoh: Lipat dua, jangan pakai pewangi mawar, dll. (Opsional)">{{ old('catatan') }}</textarea>
           </div>
-          
+
         </div>
       </div>
     </div>
@@ -80,7 +80,7 @@
             <i class="ti ti-plus fs-2"></i> Tambah Item
           </button>
         </div>
-        
+
         <div class="table-responsive">
           <table class="table table-vcenter card-table" id="itemTable">
             <thead>
@@ -132,7 +132,7 @@
             </tfoot>
           </table>
         </div>
-        
+
         @error('items')
         <div class="alert alert-important alert-danger m-3 d-flex align-items-center mb-0" role="alert">
           <i class="ti ti-alert-circle me-2 fs-2"></i>
@@ -150,7 +150,7 @@
         </button>
       </div>
     </div>
-    
+
   </div>
 </form>
 @endsection
@@ -216,7 +216,7 @@ document.querySelectorAll('.item-row').forEach(bindRow);
 document.getElementById('addItem').addEventListener('click', () => {
   const tbody = document.getElementById('itemRows');
   const tmpl = tbody.querySelector('.item-row').cloneNode(true);
-  
+
   // Bersihkan data duplikasi pada baris baru hasil kloningan
   tmpl.querySelector('.layanan-select').selectedIndex = 0;
   tmpl.querySelector('.jumlah-input').value = 1;
@@ -224,10 +224,54 @@ document.getElementById('addItem').addEventListener('click', () => {
   tmpl.querySelector('.subtotal-display').textContent = '-';
   tmpl.querySelector('.satuan-label').textContent = 'kg';
   tmpl.querySelector('.remove-row').disabled = false;
-  
+
   tbody.appendChild(tmpl);
   bindRow(tmpl);
   updateIndexes();
+});
+
+// ===== Konfirmasi SweetAlert Sebelum Submit Order =====
+const orderForm = document.getElementById('orderForm');
+
+orderForm.addEventListener('submit', function (e) {
+  // Jangan tampilkan konfirmasi dua kali (mis. saat submit() dipanggil manual setelah konfirmasi)
+  if (orderForm.dataset.confirmed === 'true') {
+    return;
+  }
+
+  e.preventDefault();
+
+  // Validasi bawaan browser tetap jalan dulu (required, dsb)
+  if (!orderForm.reportValidity()) {
+    return;
+  }
+
+  const pelangganSelect = orderForm.querySelector('select[name="pelanggan_id"]');
+  const namaPelanggan = pelangganSelect.options[pelangganSelect.selectedIndex]?.text || '-';
+  const jumlahItem = document.querySelectorAll('.item-row').length;
+  const totalBayar = document.getElementById('grandTotal').textContent;
+
+  Swal.fire({
+    title: 'Buat Order Baru?',
+    html: `
+      Pelanggan: <b>${namaPelanggan}</b><br>
+      Jumlah item layanan: <b>${jumlahItem}</b><br>
+      Total bayar: <b>${totalBayar}</b><br><br>
+      Pastikan data sudah benar sebelum disimpan.
+    `,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Ya, Buat Order',
+    cancelButtonText: 'Periksa Lagi',
+    confirmButtonColor: '#206bc4', // warna primary Tabler
+    cancelButtonColor: '#626976',
+    reverseButtons: true,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      orderForm.dataset.confirmed = 'true';
+      orderForm.submit();
+    }
+  });
 });
 </script>
 @endpush

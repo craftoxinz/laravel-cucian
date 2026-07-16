@@ -91,14 +91,13 @@
                 <i class="ti ti-edit fs-2"></i>
               </a>
               @if($user->id !== auth()->id())
-              <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline"
-                    onsubmit="return confirm('Hapus user {{ $user->name }}?')">
-                @csrf @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-icon btn-outline-danger" title="Hapus User" style="border-radius: 6px;">
-                  <i class="ti ti-trash fs-2"></i>
-                </button>
-              </form>
-              @endif
+                <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline form-delete-user">
+                    @csrf @method('DELETE')
+                    <button type="button" class="btn btn-sm btn-icon btn-outline-danger btn-delete-user" title="Hapus User" style="border-radius: 6px;" data-nama="{{ $user->name }}">
+                        <i class="ti ti-trash fs-2"></i>
+                    </button>
+                </form>
+                @endif
             </div>
           </td>
         </tr>
@@ -133,3 +132,45 @@
   @endif
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.btn-delete-user').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const form = btn.closest('form.form-delete-user');
+      const nama = btn.dataset.nama;
+
+      Swal.fire({
+        title: 'Hapus User?',
+        html: `Yakin ingin menghapus <b>${nama}</b>?<br>Data yang sudah dihapus tidak dapat dikembalikan.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#d63939',
+        cancelButtonColor: '#626976',
+        reverseButtons: true,
+        focusCancel: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  });
+
+  @if(session('success'))
+    Swal.fire({
+      title: 'Berhasil!',
+      text: @json(session('success')),
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#2fb344', // warna success Tabler
+      timer: 2500,
+      timerProgressBar: true,
+    });
+  @endif
+});
+</script>
+@endpush
