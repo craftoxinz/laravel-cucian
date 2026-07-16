@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         // Roles
         $admin  = Role::create(['name' => 'admin',  'label' => 'Administrator']);
         $kasir  = Role::create(['name' => 'kasir',  'label' => 'Kasir']);
+        $kurir  = Role::create(['name' => 'kurir',  'label' => 'Kurir']);
 
         // Users
         User::create([
@@ -31,6 +32,14 @@ class DatabaseSeeder extends Seeder
             'name'      => 'Sandika Galih',
             'email'     => 'kasir@laundryku.com',
             'password'  => Hash::make('Kasir123'),
+            'is_active' => true,
+        ]);
+
+        User::create([
+            'role_id'   => $kurir->id,
+            'name'      => 'Asep Sumpena',
+            'email'     => 'kurir@laundryku.com',
+            'password'  => Hash::make('Kurir123'),
             'is_active' => true,
         ]);
 
