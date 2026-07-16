@@ -16,10 +16,10 @@
 
 @section('content')
 <div class="row row-cards">
-  
+
   <!-- ===== COLUMN KIRI: METADATA & UPDATE STATUS ===== -->
   <div class="col-lg-4">
-    
+
     <!-- Info Utama Order -->
     <div class="card mb-3">
       <div class="card-status-top bg-primary"></div>
@@ -104,10 +104,10 @@
         <h3 class="card-title text-heading">Perbarui Status Kerja</h3>
       </div>
       <div class="card-body">
-        <form action="{{ route('orders.updateStatus', $order) }}" method="POST">
+        <form action="{{ route('orders.updateStatus', $order) }}" method="POST" id="formUpdateStatus">
           @csrf @method('PATCH')
           <div class="mb-3">
-            <select name="status" class="form-select">
+            <select name="status" id="statusSelect" class="form-select">
               @foreach(['antri'=>'Antri','proses'=>'Diproses','selesai'=>'Selesai','diambil'=>'Sudah Diambil'] as $val => $label)
               <option value="{{ $val }}" {{ $order->status === $val ? 'selected' : '' }}>{{ $label }}</option>
               @endforeach
@@ -128,7 +128,7 @@
         <h3 class="card-title text-success font-weight-medium">Konfirmasi Pembayaran</h3>
       </div>
       <div class="card-body">
-        <form action="{{ route('orders.bayar', $order) }}" method="POST">
+        <form action="{{ route('orders.bayar', $order) }}" method="POST" id="formBayar">
           @csrf @method('PATCH')
           <div class="mb-3">
             <label class="form-label text-secondary small">Metode Pembayaran</label>
@@ -162,7 +162,7 @@
       <div class="card-header">
         <h3 class="card-title text-heading">Detail Item Cucian</h3>
       </div>
-      
+
       <div class="table-responsive">
         <table class="table table-vcenter card-table text-nowrap">
           <thead>
@@ -199,6 +199,88 @@
       </div>
     </div>
   </div>
-  
+
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // ===== Konfirmasi Update Status Kerja =====
+  const formUpdateStatus = document.getElementById('formUpdateStatus');
+  if (formUpdateStatus) {
+    formUpdateStatus.addEventListener('submit', function (e) {
+      if (formUpdateStatus.dataset.confirmed === 'true') {
+        return;
+      }
+      e.preventDefault();
+
+      const statusSelect = document.getElementById('statusSelect');
+      const labelStatus = statusSelect.options[statusSelect.selectedIndex].text;
+
+      Swal.fire({
+        title: 'Update Status Kerja?',
+        html: `Status order akan diubah menjadi <b>${labelStatus}</b>.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Update',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#4299e1', // warna info Tabler
+        cancelButtonColor: '#626976',
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          formUpdateStatus.dataset.confirmed = 'true';
+          formUpdateStatus.submit();
+        }
+      });
+    });
+  }
+
+  // ===== Konfirmasi Pembayaran Lunas =====
+  const formBayar = document.getElementById('formBayar');
+  if (formBayar) {
+    formBayar.addEventListener('submit', function (e) {
+      if (formBayar.dataset.confirmed === 'true') {
+        return;
+      }
+      e.preventDefault();
+
+      const metode = formBayar.querySelector('input[name="metode_bayar"]:checked');
+      const labelMetode = metode.value === 'tunai' ? 'Tunai' : 'Transfer / QRIS';
+
+      Swal.fire({
+        title: 'Konfirmasi Pembayaran?',
+        html: `Order akan ditandai <b>Lunas</b> dengan metode <b>${labelMetode}</b>.<br>Pastikan pembayaran sudah benar-benar diterima.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Sudah Lunas',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#2fb344', // warna success Tabler
+        cancelButtonColor: '#626976',
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          formBayar.dataset.confirmed = 'true';
+          formBayar.submit();
+        }
+      });
+    });
+  }
+
+  // ===== Flash Success (mis. setelah redirect balik ke halaman ini) =====
+  @if(session('success'))
+    Swal.fire({
+      title: 'Berhasil!',
+      text: @json(session('success')),
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#2fb344',
+      timer: 2500,
+      timerProgressBar: true,
+    });
+  @endif
+});
+</script>
+@endpush
