@@ -114,6 +114,13 @@
           </div>
         </form>
 
+        <div class="text-center mt-4">
+          <p class="text-secondary small mb-3">Belum punya akun pelanggan? Daftar sekarang untuk memesan layanan dan memantau status cucian.</p>
+          <a href="{{ route('pelanggan.register') }}" class="btn btn-outline-primary w-100 py-2" style="border-radius: 8px;">
+            <i class="ti ti-user-plus me-2"></i> Daftar Pelanggan
+          </a>
+        </div>
+
       </div>
     </div>
 

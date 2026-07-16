@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Order::with(['pelanggan', 'user'])->latest();
+        $query = Order::with(['pelanggan', 'user', 'kurir'])->latest();
 
         if ($request->status) {
             $query->where('status', $request->status);
@@ -23,9 +23,9 @@ class OrderController extends Controller
             $query->where('status_bayar', $request->status_bayar);
         }
         if ($request->search) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('kode_order', 'like', "%{$request->search}%")
-                  ->orWhereHas('pelanggan', fn($p) => $p->where('nama', 'like', "%{$request->search}%"));
+                    ->orWhereHas('pelanggan', fn($p) => $p->where('nama', 'like', "%{$request->search}%"));
             });
         }
 
@@ -36,19 +36,21 @@ class OrderController extends Controller
     public function create()
     {
         $pelanggan = Pelanggan::orderBy('nama')->get();
-        $layanan   = Layanan::where('is_active', true)->get();
+        $layanan = Layanan::where('is_active', true)->get();
         return view('orders.create', compact('pelanggan', 'layanan'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'pelanggan_id'       => 'required|exists:pelanggan,id',
-            'estimasi_selesai'   => 'required|date|after_or_equal:today',
-            'catatan'            => 'nullable|string',
-            'items'              => 'required|array|min:1',
+            'pelanggan_id' => 'required|exists:pelanggan,id',
+            'estimasi_selesai' => 'required|date|after_or_equal:today',
+            'catatan' => 'nullable|string',
+            'items' => 'required|array|min:1',
             'items.*.layanan_id' => 'required|exists:layanan,id',
-            'items.*.jumlah'     => 'required|numeric|min:0.1',
+            'items.*.jumlah' => 'required|numeric|min:0.1',
+            'tipe_order' => 'required|in:datang_langsung,delivery',
+            'alamat_jemput' => 'required_if:tipe_order,delivery|nullable|string',
         ]);
 
         DB::transaction(function () use ($request) {
@@ -61,22 +63,25 @@ class OrderController extends Controller
                 $total += $subtotal;
                 $itemsData[] = [
                     'layanan_id' => $layanan->id,
-                    'jumlah'     => $item['jumlah'],
-                    'harga'      => $layanan->harga,
-                    'subtotal'   => $subtotal,
+                    'jumlah' => $item['jumlah'],
+                    'harga' => $layanan->harga,
+                    'subtotal' => $subtotal,
                 ];
             }
 
             $order = Order::create([
-                'kode_order'       => Order::generateKode(),
-                'pelanggan_id'     => $request->pelanggan_id,
-                'user_id'          => auth()->id(),
-                'status'           => 'antri',
-                'status_bayar'     => 'belum',
-                'tgl_masuk'        => today(),
+                'kode_order' => Order::generateKode(),
+                'pelanggan_id' => $request->pelanggan_id,
+                'user_id' => auth()->id(),
+                'status' => 'antri',
+                'status_bayar' => 'belum',
+                'tgl_masuk' => today(),
                 'estimasi_selesai' => $request->estimasi_selesai,
-                'total'            => $total,
-                'catatan'          => $request->catatan,
+                'total' => $total,
+                'catatan' => $request->catatan,
+                'tipe_order' => $request->tipe_order,
+                'alamat_jemput' => $request->tipe_order === 'delivery' ? $request->alamat_jemput : null,
+                'status_jemput' => $request->tipe_order === 'delivery' ? 'menunggu' : null,
             ]);
 
             foreach ($itemsData as $item) {
@@ -89,7 +94,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['pelanggan', 'user', 'items.layanan']);
+        $order->load(['pelanggan', 'user', 'kurir', 'items.layanan']);
         return view('orders.show', compact('order'));
     }
 
