@@ -13,7 +13,7 @@ class PelangganDashboardController extends Controller
 
         $stats = [
             'total_orders' => Order::where('pelanggan_id', $pelanggan->id)->count(),
-            'pending' => Order::where('pelanggan_id', $pelanggan->id)->where('status', '!=', 'diambil')->count(),
+            'pending' => Order::where('pelanggan_id', $pelanggan->id)->whereNotIn('status', ['diambil', 'dibatalkan'])->count(),
         ];
 
         $orders = Order::where('pelanggan_id', $pelanggan->id)->latest()->take(5)->get();

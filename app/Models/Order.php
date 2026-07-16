@@ -47,6 +47,7 @@ class Order extends Model
     {
         return match ($this->status) {
             'antri' => 'warning',
+            'dibatalkan' => 'danger',
             'proses' => 'info',
             'selesai' => 'success',
             'diambil' => 'secondary',
@@ -58,6 +59,7 @@ class Order extends Model
     {
         return match ($this->status) {
             'antri' => 'Antri',
+            'dibatalkan' => 'Dibatalkan',
             'proses' => 'Diproses',
             'selesai' => 'Selesai',
             'diambil' => 'Sudah Diambil',

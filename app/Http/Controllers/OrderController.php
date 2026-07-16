@@ -29,6 +29,12 @@ class OrderController extends Controller
             });
         }
 
+        if (auth()->user()->isKasir()) {
+            $pendingOrders = (clone $query)->where('status', 'antri')->get();
+            $approvedOrders = (clone $query)->whereNotIn('status', ['antri', 'dibatalkan'])->get();
+            return view('orders.index', compact('pendingOrders', 'approvedOrders'));
+        }
+
         $orders = $query->paginate(10)->withQueryString();
         return view('orders.index', compact('orders'));
     }
@@ -92,6 +98,19 @@ class OrderController extends Controller
         return redirect()->route('orders.index')->with('success', 'Order berhasil dibuat.');
     }
 
+    public function approve(Order $order)
+    {
+        abort_unless(auth()->user()->isKasir(), 403, 'Hanya kasir yang dapat menyetujui order.');
+        abort_if($order->status !== 'antri', 403, 'Order ini sudah tidak dalam status antri.');
+
+        $order->update([
+            'status' => 'proses',
+            'user_id' => $order->user_id ?? auth()->id(),
+        ]);
+
+        return back()->with('success', "Order {$order->kode_order} berhasil disetujui.");
+    }
+
     public function show(Order $order)
     {
         $order->load(['pelanggan', 'user', 'kurir', 'items.layanan']);
@@ -101,7 +120,7 @@ class OrderController extends Controller
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
-            'status' => 'required|in:antri,proses,selesai,diambil',
+            'status' => 'required|in:antri,proses,selesai,diambil,dibatalkan',
         ]);
 
         $data = ['status' => $request->status];

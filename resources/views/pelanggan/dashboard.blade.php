@@ -68,9 +68,14 @@
                         <h3 class="card-title">Pesanan Terbaru</h3>
                         <div class="text-secondary small">Lihat status dan detail pesanan terkini.</div>
                     </div>
-                    <a href="{{ route('pelanggan.orders.index') }}" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1" style="border-radius: 6px;">
-                        <i class="ti ti-eye fs-2"></i> Lihat Semua
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('pelanggan.orders.index') }}" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1" style="border-radius: 6px;">
+                            <i class="ti ti-eye fs-2"></i> Lihat Semua
+                        </a>
+                        <a href="{{ route('pelanggan.orders.create') }}" class="btn btn-sm btn-primary d-flex align-items-center gap-1" style="border-radius: 6px;">
+                            <i class="ti ti-plus fs-2"></i> Order Baru
+                        </a>
+                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-vcenter card-table text-nowrap">

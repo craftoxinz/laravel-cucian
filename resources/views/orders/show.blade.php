@@ -44,8 +44,13 @@
                         </div>
                         <div class="row align-items-center mb-2">
                             <div class="col-5 text-secondary small">Petugas Kasir</div>
-                            <div class="col-7 text-heading"><span
-                                    class="badge bg-muted-lt text-secondary">{{ $order->user->name }}</span></div>
+                            <div class="col-7 text-heading">
+                                @if($order->user)
+                                    <span class="badge bg-muted-lt text-secondary">{{ $order->user->name }}</span>
+                                @else
+                                    <span class="text-secondary fst-italic">Belum ditugaskan</span>
+                                @endif
+                            </div>
                         </div>
                         <div class="row align-items-center mb-2">
                             <div class="col-5 text-secondary small">Tipe Order</div>

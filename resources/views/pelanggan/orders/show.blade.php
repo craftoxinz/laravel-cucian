@@ -59,10 +59,20 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer d-flex justify-content-end">
+        <div class="card-footer d-flex justify-content-between align-items-center">
             <a href="{{ route('pelanggan.orders.index') }}" class="btn btn-outline-secondary" style="border-radius: 6px;">
                 <i class="ti ti-arrow-left me-2"></i> Kembali ke Pesanan
             </a>
+
+            @if($order->status === 'antri')
+                <form action="{{ route('pelanggan.orders.cancel', $order->id) }}" method="POST" onsubmit="return confirm('Batalkan pesanan ini?');">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-danger d-flex align-items-center gap-1" style="border-radius: 6px;">
+                        <i class="ti ti-x fs-2"></i> Batalkan Pesanan
+                    </button>
+                </form>
+            @endif
         </div>
     </div>
 @endsection

@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Orders
         Route::resource('orders', OrderController::class)->only(['index', 'create', 'store', 'show']);
+        Route::patch('orders/{order}/approve', [OrderController::class, 'approve'])->name('orders.approve');
         Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
         Route::patch('orders/{order}/bayar', [OrderController::class, 'bayar'])->name('orders.bayar');
         Route::get('orders/{order}/nota', [OrderController::class, 'nota'])->name('orders.nota');
@@ -98,6 +99,9 @@ Route::post('/pelanggan/logout', [PelangganAuthController::class, 'logout'])->na
 
 Route::middleware(['auth:pelanggan'])->prefix('pelanggan')->name('pelanggan.')->group(function () {
     Route::get('/dashboard', [PelangganDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/orders/create', [PelangganOrderController::class, 'create'])->name('orders.create');
+    Route::post('/orders', [PelangganOrderController::class, 'store'])->name('orders.store');
     Route::get('/orders', [PelangganOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [PelangganOrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{order}/cancel', [PelangganOrderController::class, 'cancel'])->name('orders.cancel');
 });
