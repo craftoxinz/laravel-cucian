@@ -37,8 +37,15 @@ class AuthController extends Controller
         // Login
         \Illuminate\Support\Facades\Auth::login($user, $request->filled('remember'));
         $request->session()->regenerate();
+
+        // Redirect sesuai role
+        if ($user->role?->name === 'kurir') {
+            return redirect()->intended(route('kurir.dashboard.index'));
+        }
+
         return redirect()->intended(route('dashboard'));
     }
+
     public function logout(Request $request)
     {
         Auth::logout();
