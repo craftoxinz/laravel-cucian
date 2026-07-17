@@ -47,21 +47,17 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3" id="alamatJemputWrapper"
-                             style="{{ old('tipe_order') == 'delivery' ? '' : 'display: none;' }}">
+                        <div class="mb-3" id="alamatJemputWrapper">
                             <label class="form-label required">Alamat Penjemputan</label>
-                            <div class="input-icon">
-              <span class="input-icon-addon">
-                <i class="ti ti-map-pin text-secondary fs-2"></i>
-              </span>
-                                <textarea name="alamat_jemput" id="alamatJemput"
-                                          class="form-control @error('alamat_jemput') is-invalid @enderror" rows="2"
-                                          placeholder="Alamat lengkap tempat kurir menjemput cucian"
-                                          style="padding-left: 2.5rem;">{{ old('alamat_jemput', $pelanggan->alamat) }}</textarea>
-                            </div>
+                            <textarea name="alamat_jemput"
+                                      id="alamatJemput"
+                                      class="form-control @error('alamat_jemput') is-invalid @enderror"
+                                      rows="3"
+                                      placeholder="Masukkan alamat lengkap penjemputan cucian">{{ old('alamat_jemput', $pelanggan->alamat) }}</textarea>
                             @error('alamat_jemput')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                            <small class="form-hint">Alamat diisi otomatis sesuai profil Anda. Anda dapat menggantinya jika lokasi penjemputan berbeda.</small>
                         </div>
 
                         <div class="mb-0">
@@ -242,20 +238,29 @@
         const alamatJemputWrapper = document.getElementById('alamatJemputWrapper');
         const alamatJemputInput = document.getElementById('alamatJemput');
 
+        // Simpan alamat asli pelanggan dari profil agar tidak hilang saat switch radio
+        const defaultAlamat = @json($pelanggan->alamat);
+
         function toggleAlamatJemput() {
             const selected = document.querySelector('.tipe-order-radio:checked')?.value;
+
             if (selected === 'delivery') {
-                alamatJemputWrapper.style.display = '';
+                alamatJemputWrapper.style.display = 'block';
                 alamatJemputInput.setAttribute('required', 'required');
+
+                // Kembalikan isi alamat jika sebelumnya kosong
+                if (!alamatJemputInput.value) {
+                    alamatJemputInput.value = defaultAlamat;
+                }
             } else {
                 alamatJemputWrapper.style.display = 'none';
                 alamatJemputInput.removeAttribute('required');
-                alamatJemputInput.value = '';
             }
         }
 
         tipeOrderRadios.forEach(radio => radio.addEventListener('change', toggleAlamatJemput));
 
+        // Eksekusi saat halaman pertama kali dimuat
         toggleAlamatJemput();
 
         const orderForm = document.getElementById('orderForm');

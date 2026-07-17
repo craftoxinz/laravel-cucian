@@ -9,24 +9,46 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['role_id', 'name', 'email', 'password', 'is_active', 'gambar'];
-    protected $hidden = ['password', 'remember_token'];
-    protected $casts = ['password' => 'hashed', 'is_active' => 'boolean'];
+    protected $fillable = [
+        'role_id',
+        'name',
+        'email',
+        'password',
+        'is_active',
+        'gambar',
+    ];
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Relasi ke Role
+     */
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class)->withDefault([
+            'name'  => 'guest',
+            'label' => 'Guest',
+        ]);
     }
+
+    /**
+     * Helper Helper Role
+     */
     public function isAdmin(): bool
     {
-        return $this->role->name === 'admin';
+        return $this->role?->name === 'admin';
     }
+
     public function isKasir(): bool
     {
-        return $this->role->name === 'kasir';
+        return $this->role?->name === 'kasir';
     }
-    public function orders()
+
+    public function isKurir(): bool
     {
-        return $this->hasMany(Order::class);
+        return $this->role?->name === 'kurir';
     }
 }

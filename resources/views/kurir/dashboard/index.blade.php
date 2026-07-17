@@ -4,12 +4,11 @@
 @section('page-title', 'Dashboard Kurir')
 
 @push('styles')
-    <!-- Menggunakan ApexCharts untuk grafik aktivitas -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.44.0/dist/apexcharts.min.js"></script>
 @endpush
 
 @section('content')
-    <!-- 1. Card Ringkasan Statistik -->
+    <!-- Ringkasan Card Statistik -->
     <div class="row row-cards mb-4">
         <div class="col-sm-6 col-lg-3">
             <div class="card card-sm">
@@ -101,7 +100,7 @@
     </div>
 
     <div class="row row-cards">
-        <!-- 2. Chart Aktivitas Pengantaran 7 Hari Terakhir -->
+        <!-- Chart Aktivitas -->
         <div class="col-lg-7">
             <div class="card">
                 <div class="card-body">
@@ -111,7 +110,7 @@
             </div>
         </div>
 
-        <!-- 3. Quick Table Order Aktif Kurir -->
+        <!-- Order Aktif Kurir -->
         <div class="col-lg-5">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -134,7 +133,7 @@
                             <tr>
                                 <td class="fw-bold">{{ $order->kode_order }}</td>
                                 <td>
-                                    <div class="text-heading fw-medium">{{ $order->pelanggan->nama }}</div>
+                                    <div class="text-heading fw-medium">{{ $order->pelanggan?->nama ?? 'Pelanggan Umum' }}</div>
                                     <div class="small text-secondary text-truncate" style="max-width: 130px;">
                                         {{ $order->alamat_jemput ?? '-' }}
                                     </div>

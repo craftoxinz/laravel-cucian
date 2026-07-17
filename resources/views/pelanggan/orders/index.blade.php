@@ -16,12 +16,13 @@
 
 @section('content')
     <div class="row row-cards">
+        {{-- Pesanan Menunggu Persetujuan --}}
         <div class="col-12">
             <div class="card mb-3">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div>
                         <h3 class="card-title">Pesanan Menunggu Persetujuan</h3>
-                        <p class="text-secondary small mb-0">Order yang dibuat pelanggan dan belum disetujui kasir.</p>
+                        <p class="text-secondary small mb-0">Order yang Anda buat dan belum disetujui kasir.</p>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -29,6 +30,7 @@
                         <thead>
                         <tr>
                             <th>Kode Order</th>
+                            <th>Tipe Order</th>
                             <th>Total</th>
                             <th>Tanggal Masuk</th>
                             <th class="text-end">Status</th>
@@ -39,6 +41,17 @@
                         @forelse($pendingOrders as $order)
                             <tr>
                                 <td class="fw-semibold">{{ $order->kode_order }}</td>
+                                <td>
+                                    @if($order->tipe_order === 'delivery')
+                                        <span class="badge bg-blue-lt text-blue rounded-pill px-2 py-1">
+                                            <i class="ti ti-truck-delivery me-1"></i> Delivery
+                                        </span>
+                                    @else
+                                        <span class="badge bg-secondary-lt text-secondary rounded-pill px-2 py-1">
+                                            <i class="ti ti-building-store me-1"></i> Datang Langsung
+                                        </span>
+                                    @endif
+                                </td>
                                 <td>{{ $order->getTotalFormattedAttribute() }}</td>
                                 <td>{{ $order->tgl_masuk?->format('d M Y') }}</td>
                                 <td class="text-end">
@@ -52,7 +65,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center py-5 text-secondary">
+                                <td colspan="6" class="text-center py-5 text-secondary">
                                     <div class="empty">
                                         <div class="empty-icon">
                                             <div class="avatar avatar-lg bg-muted-lt" style="border-radius: 12px;">
@@ -71,12 +84,13 @@
             </div>
         </div>
 
+        {{-- Pesanan Disetujui / Diproses --}}
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div>
                         <h3 class="card-title">Pesanan Disetujui / Diproses</h3>
-                        <p class="text-secondary small mb-0">Order yang sudah disetujui kasir dan sedang diproses.</p>
+                        <p class="text-secondary small mb-0">Order yang sedang diproses laundry dan perjalanan kurir.</p>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -84,7 +98,8 @@
                         <thead>
                         <tr>
                             <th>Kode Order</th>
-                            <th>Status</th>
+                            <th>Status Laundry</th>
+                            <th>Status Delivery (Kurir)</th>
                             <th>Total</th>
                             <th>Tanggal Masuk</th>
                             <th class="text-end">Aksi</th>
@@ -99,6 +114,15 @@
                                         {{ $order->getStatusLabelAttribute() }}
                                     </span>
                                 </td>
+                                <td>
+                                    @if($order->tipe_order === 'delivery')
+                                        <span class="badge bg-{{ $order->status_jemput_badge }}-lt text-{{ $order->status_jemput_badge }} rounded-pill px-2.5 py-1">
+                                            <i class="ti ti-truck-delivery me-1"></i> {{ $order->status_jemput_label }}
+                                        </span>
+                                    @else
+                                        <span class="text-secondary small">-</span>
+                                    @endif
+                                </td>
                                 <td>{{ $order->getTotalFormattedAttribute() }}</td>
                                 <td>{{ $order->tgl_masuk?->format('d M Y') }}</td>
                                 <td class="text-end">
@@ -109,7 +133,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center py-5 text-secondary">
+                                <td colspan="6" class="text-center py-5 text-secondary">
                                     <div class="empty">
                                         <div class="empty-icon">
                                             <div class="avatar avatar-lg bg-muted-lt" style="border-radius: 12px;">

@@ -11,6 +11,7 @@ class Order extends Model
         'tgl_masuk', 'estimasi_selesai', 'tgl_diambil', 'total', 'metode_bayar', 'catatan',
         'tipe_order', 'alamat_jemput', 'kurir_id', 'status_jemput',
     ];
+
     protected $casts = [
         'tgl_masuk' => 'date',
         'estimasi_selesai' => 'date',
@@ -20,17 +21,25 @@ class Order extends Model
 
     public function pelanggan()
     {
-        return $this->belongsTo(Pelanggan::class);
+        return $this->belongsTo(Pelanggan::class)->withDefault([
+            'nama' => 'Pelanggan Umum',
+        ]);
     }
 
+    // PERBAIKAN: Gunakan withDefault() agar $order->user tidak pernah bernilai null
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault([
+            'name' => 'Belum ditugaskan',
+        ]);
     }
 
+    // PERBAIKAN: Gunakan withDefault() agar $order->kurir tidak pernah bernilai null
     public function kurir()
     {
-        return $this->belongsTo(User::class, 'kurir_id');
+        return $this->belongsTo(User::class, 'kurir_id')->withDefault([
+            'name' => 'Belum ada kurir',
+        ]);
     }
 
     public function items()

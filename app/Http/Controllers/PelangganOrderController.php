@@ -89,7 +89,10 @@ class PelangganOrderController extends Controller
         if ($order->pelanggan_id !== $pelanggan->id) {
             abort(403);
         }
-        $order->load(['items.layanan']);
+
+        // PERBAIKAN: Muat relasi 'kurir'
+        $order->load(['items.layanan', 'kurir']);
+
         return view('pelanggan.orders.show', compact('order'));
     }
 

@@ -53,12 +53,12 @@
                         <td>
                             <div class="font-weight-medium text-heading mb-0">{{ $order->kode_order }}</div>
                             <div class="small text-secondary d-flex align-items-center gap-1">
-                                <i class="ti ti-user fs-4 text-muted"></i> Kasir: {{ $order->user->name }}
+                                <i class="ti ti-user fs-4 text-muted"></i> Kasir: {{ $order->user?->name ?? 'Belum ditugaskan' }}
                             </div>
                         </td>
                         <td>
-                            <div class="font-weight-medium text-heading">{{ $order->pelanggan->nama }}</div>
-                            <div class="small text-secondary">{{ $order->pelanggan->telepon ?? '-' }}</div>
+                            <div class="font-weight-medium text-heading">{{ $order->pelanggan?->nama ?? '-' }}</div>
+                            <div class="small text-secondary">{{ $order->pelanggan?->telepon ?? '-' }}</div>
                         </td>
                         <td class="text-secondary small" style="white-space: normal; max-width: 220px;">
                             <i class="ti ti-map-pin fs-4 text-muted me-1"></i>{{ $order->alamat_jemput ?? '-' }}
@@ -86,14 +86,12 @@
                                     </button>
                                 </form>
                             @else
-                                <form action="{{ route('kurir.orders.updateStatusJemput', $order) }}" method="POST" class="d-inline form-update-status">
+                                <form action="{{ route('kurir.orders.updateStatusJemput', $order) }}" method="POST" class="d-inline">
                                     @csrf @method('PATCH')
-                                    <select name="status_jemput"
-                                            class="form-select form-select-sm select-status-jemput"
+                                    <select name="status_jemput" class="form-select form-select-sm select-status-jemput"
                                             data-previous-value="{{ $order->status_jemput }}"
                                         {{ $order->status_jemput === 'selesai' ? 'disabled' : '' }}>
 
-                                        {{-- Tahap 1: Penjemputan awal --}}
                                         <optgroup label="1. Penjemputan Awal">
                                             <option value="menuju_lokasi" {{ $order->status_jemput === 'menuju_lokasi' ? 'selected' : '' }}>
                                                 Menuju Lokasi Pelanggan
@@ -106,7 +104,6 @@
                                             </option>
                                         </optgroup>
 
-                                        {{-- Tahap 2: Pengantaran Kembali --}}
                                         <optgroup label="2. Pengantaran Kembali">
                                             <option value="mengantar_ke_pelanggan" {{ $order->status_jemput === 'mengantar_ke_pelanggan' ? 'selected' : '' }}>
                                                 Mengantar Kembali ke Pelanggan
@@ -122,7 +119,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="{{ $tab === 'saya' ? 7 : 6 }}" class="text-center py-5">
+                        <td colspan="{{ $tab === 'saya' ? 6 : 5 }}" class="text-center py-5">
                             <div class="empty">
                                 <div class="empty-icon">
                                     <div class="avatar avatar-md bg-muted-lt" style="border-radius: 10px;">
@@ -159,7 +156,6 @@
             });
             @endif
 
-            // Confirm Approve Order
             document.querySelectorAll('.form-approve').forEach(form => {
                 form.addEventListener('submit', function (e) {
                     if (form.dataset.confirmed === 'true') return;
@@ -183,7 +179,6 @@
                 });
             });
 
-            // Handler Change Status Jemput (dengan Konfirmasi jika Selesai)
             document.querySelectorAll('.select-status-jemput').forEach(select => {
                 select.addEventListener('change', function () {
                     const form = this.closest('form');
@@ -205,12 +200,10 @@
                             if (result.isConfirmed) {
                                 form.submit();
                             } else {
-                                // Kembalikan ke pilihan sebelumnya jika dibatalkan
                                 this.value = previousValue;
                             }
                         });
                     } else {
-                        // Jika bukan 'selesai', langsung submit form
                         form.submit();
                     }
                 });
