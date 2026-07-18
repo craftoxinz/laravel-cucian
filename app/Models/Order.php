@@ -87,26 +87,26 @@ class Order extends Model
     public function getStatusJemputLabelAttribute(): string
     {
         return match ($this->status_jemput) {
-            'menunggu'               => 'Menunggu Kurir',
-            'menuju_lokasi'          => 'Menuju Lokasi Pelanggan',
-            'menuju_laundry'         => 'Menuju Laundry',
-            'selesai_diantar'        => 'Sudah Tiba di Laundry',
+            'menunggu' => 'Menunggu Kurir',
+            'menuju_lokasi' => 'Menuju Lokasi Pelanggan',
+            'menuju_laundry' => 'Menuju Laundry',
+            'selesai_diantar' => 'Sudah Tiba di Laundry',
             'mengantar_ke_pelanggan' => 'Mengantar ke Pelanggan',
-            'selesai'                => 'Selesai / Diterima',
-            default                  => '-',
+            'selesai' => 'Selesai / Diterima',
+            default => '-',
         };
     }
 
     public function getStatusJemputBadgeAttribute(): string
     {
         return match ($this->status_jemput) {
-            'menunggu'               => 'warning',
-            'menuju_lokasi'          => 'info',
-            'menuju_laundry'         => 'azure',
-            'selesai_diantar'        => 'teal',
+            'menunggu' => 'warning',
+            'menuju_lokasi' => 'info',
+            'menuju_laundry' => 'azure',
+            'selesai_diantar' => 'teal',
             'mengantar_ke_pelanggan' => 'purple',
-            'selesai'                => 'success',
-            default                  => 'secondary',
+            'selesai' => 'success',
+            default => 'secondary',
         };
     }
 }

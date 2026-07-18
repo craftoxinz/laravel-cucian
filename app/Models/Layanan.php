@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Layanan extends Model
@@ -12,6 +14,7 @@ class Layanan extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
     public function getHargaFormattedAttribute(): string
     {
         return 'Rp ' . number_format($this->harga, 0, ',', '.');
