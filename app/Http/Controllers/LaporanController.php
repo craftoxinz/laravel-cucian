@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Order;
@@ -19,10 +20,10 @@ class LaporanController extends Controller
             ->get();
 
         $summary = [
-            'total_order'       => $orders->count(),
-            'total_pendapatan'  => $orders->where('status_bayar', 'lunas')->sum('total'),
-            'belum_bayar'       => $orders->where('status_bayar', 'belum')->count(),
-            'sudah_diambil'     => $orders->where('status', 'diambil')->count(),
+            'total_order' => $orders->count(),
+            'total_pendapatan' => $orders->where('status_bayar', 'lunas')->sum('total'),
+            'belum_bayar' => $orders->where('status_bayar', 'belum')->count(),
+            'sudah_diambil' => $orders->where('status', 'diambil')->count(),
         ];
 
         $tahunList = Order::selectRaw('YEAR(tgl_masuk) as tahun')
@@ -38,7 +39,7 @@ class LaporanController extends Controller
         return view('laporan.index', compact('orders', 'summary', 'bulan', 'tahun', 'tahunList'));
     }
 
-   public function export(Request $request)
+    public function export(Request $request)
     {
         $bulan = $request->bulan ?? now()->month;
         $tahun = $request->tahun ?? now()->year;
@@ -52,10 +53,10 @@ class LaporanController extends Controller
             ->get();
 
         $summary = [
-            'total_order'      => $orders->count(),
+            'total_order' => $orders->count(),
             'total_pendapatan' => $orders->where('status_bayar', 'lunas')->sum('total'),
-            'belum_bayar'      => $orders->where('status_bayar', 'belum')->count(),
-            'sudah_diambil'    => $orders->where('status', 'diambil')->count(),
+            'belum_bayar' => $orders->where('status_bayar', 'belum')->count(),
+            'sudah_diambil' => $orders->where('status', 'diambil')->count(),
         ];
 
         $pdf = Pdf::loadView('laporan.pdf', compact('orders', 'summary', 'bulan', 'tahun', 'namaBulan'))

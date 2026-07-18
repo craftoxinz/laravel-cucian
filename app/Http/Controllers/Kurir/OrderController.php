@@ -43,7 +43,7 @@ class OrderController extends Controller
         );
 
         $order->update([
-            'kurir_id'      => auth()->id(),
+            'kurir_id' => auth()->id(),
             'status_jemput' => 'menuju_lokasi',
         ]);
 

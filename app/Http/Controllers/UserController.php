@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage; // Wajib diimport untuk kelola file foto
+use Illuminate\Support\Facades\Storage;
+
+// Wajib diimport untuk kelola file foto
 
 class UserController extends Controller
 {
@@ -25,18 +27,18 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:100',
-            'email'    => 'required|email|unique:users,email',
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'role_id'  => 'required|exists:roles,id',
-            'gambar'   => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // Validasi foto profil
+            'role_id' => 'required|exists:roles,id',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // Validasi foto profil
         ]);
 
         $data = [
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
-            'role_id'   => $request->role_id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => $request->role_id,
             'is_active' => true,
         ];
 
@@ -59,12 +61,12 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name'      => 'required|string|max:100',
-            'email'     => 'required|email|unique:users,email,' . $user->id,
-            'password'  => 'nullable|string|min:6|confirmed',
-            'role_id'   => 'required|exists:roles,id',
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:6|confirmed',
+            'role_id' => 'required|exists:roles,id',
             // 'is_active' dihapus dari validasi karena $request->boolean() sudah menjamin output true/false
-            'gambar'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         // Proteksi: Mencegah user mengubah status aktif atau role dirinya sendiri
@@ -78,9 +80,9 @@ class UserController extends Controller
         }
 
         $data = [
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'role_id'   => $roleId,
+            'name' => $request->name,
+            'email' => $request->email,
+            'role_id' => $roleId,
             'is_active' => $isActive,
         ];
 
