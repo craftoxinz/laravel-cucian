@@ -8,9 +8,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
-        :root { --tblr-primary: #0054a6; }
-        .navbar-vertical .nav-link.active { background: rgba(255,255,255,0.08); border-radius: 6px; }
-        .navbar-vertical .nav-link:hover { background: rgba(255,255,255,0.04); border-radius: 6px; }
+        :root {
+            --tblr-primary: #0054a6;
+        }
+
+        .navbar-vertical .nav-link.active {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+        }
+
+        .navbar-vertical .nav-link:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
+        }
     </style>
     @stack('styles')
 </head>
@@ -26,7 +36,8 @@
             </button>
 
             <h1 class="navbar-brand navbar-brand-autodark m-0">
-                <a href="{{ route('kurir.dashboard.index') }}" class="d-flex align-items-center gap-2 text-decoration-none">
+                <a href="{{ route('kurir.dashboard.index') }}"
+                   class="d-flex align-items-center gap-2 text-decoration-none">
                     <div class="avatar avatar-sm bg-primary text-white" style="border-radius: 8px;">
                         <i class="ti ti-wash fs-3"></i>
                     </div>
@@ -36,7 +47,8 @@
 
             <div class="navbar-nav flex-row d-lg-none">
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                    <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                       aria-label="Open user menu">
                         <div class="avatar avatar-sm fw-bold text-white bg-primary">
                             {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
                         </div>
@@ -61,14 +73,16 @@
                 <ul class="navbar-nav pt-lg-3">
 
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('kurir.dashboard.*') ? 'active' : '' }}" href="{{ route('kurir.dashboard.index') }}">
+                        <a class="nav-link {{ request()->routeIs('kurir.dashboard.*') ? 'active' : '' }}"
+                           href="{{ route('kurir.dashboard.index') }}">
                             <span class="nav-link-icon"><i class="ti ti-layout-dashboard fs-2"></i></span>
                             <span class="nav-link-title">Dashboard</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('kurir.orders.*') ? 'active' : '' }}" href="{{ route('kurir.orders.index') }}">
+                        <a class="nav-link {{ request()->routeIs('kurir.orders.*') ? 'active' : '' }}"
+                           href="{{ route('kurir.orders.index') }}">
                             <span class="nav-link-icon"><i class="ti ti-receipt fs-2"></i></span>
                             <span class="nav-link-title">Order / Transaksi</span>
                         </a>
@@ -80,22 +94,27 @@
                     <div class="border-top border-white-10 mx-3 mb-3"></div>
 
                     <div class="d-flex justify-content-start px-3 mb-3">
-                        <a href="?theme=dark" class="nav-link p-0 hide-theme-dark text-white-50" title="Aktifkan Mode Gelap" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <a href="?theme=dark" class="nav-link p-0 hide-theme-dark text-white-50"
+                           title="Aktifkan Mode Gelap" data-bs-toggle="tooltip" data-bs-placement="right">
                             <i class="ti ti-moon fs-2 me-2"></i> <small>Mode Gelap</small>
                         </a>
-                        <a href="?theme=light" class="nav-link p-0 hide-theme-light text-white-50" title="Aktifkan Mode Terang" data-bs-toggle="tooltip" data-bs-placement="right">
+                        <a href="?theme=light" class="nav-link p-0 hide-theme-light text-white-50"
+                           title="Aktifkan Mode Terang" data-bs-toggle="tooltip" data-bs-placement="right">
                             <i class="ti ti-sun fs-2 me-2"></i> <small>Mode Terang</small>
                         </a>
                     </div>
 
                     <div class="nav-item dropdown px-3">
-                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0 align-items-center gap-2" data-bs-toggle="dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0 align-items-center gap-2"
+                           data-bs-toggle="dropdown">
                             <div class="avatar avatar-sm text-white fw-bold" style="background:var(--tblr-primary)">
                                 {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
                             </div>
                             <div>
-                                <div class="text-white fw-medium small text-truncate" style="max-width: 130px;">{{ auth()->user()->name }}</div>
-                                <div class="mt-1 small text-white-50" style="font-size: 11px;">{{ auth()->user()->role->label }}</div>
+                                <div class="text-white fw-medium small text-truncate"
+                                     style="max-width: 130px;">{{ auth()->user()->name }}</div>
+                                <div class="mt-1 small text-white-50"
+                                     style="font-size: 11px;">{{ auth()->user()->role->label }}</div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

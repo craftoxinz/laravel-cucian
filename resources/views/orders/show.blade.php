@@ -85,7 +85,8 @@
                             <div class="row align-items-center mb-2">
                                 <div class="col-5 text-secondary small">Status Penjemputan</div>
                                 <div class="col-7">
-                                    <span class="badge bg-{{ $order->status_jemput_badge }}-lt text-{{ $order->status_jemput_badge }} rounded-pill px-2.5 py-1">
+                                    <span
+                                        class="badge bg-{{ $order->status_jemput_badge }}-lt text-{{ $order->status_jemput_badge }} rounded-pill px-2.5 py-1">
                                       {{ $order->status_jemput_label }}
                                     </span>
                                 </div>

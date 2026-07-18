@@ -94,9 +94,12 @@
                                     <td>{{ $order->total_formatted }}</td>
                                     <td>{{ $order->tgl_masuk->format('d M Y') }}</td>
                                     <td class="text-end">
-                                        <form action="{{ route('orders.approve', $order) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('orders.approve', $order) }}" method="POST"
+                                              class="d-inline">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="btn btn-sm btn-success d-flex align-items-center gap-1" style="border-radius: 6px;">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-success d-flex align-items-center gap-1"
+                                                    style="border-radius: 6px;">
                                                 <i class="ti ti-check fs-2"></i> Setujui
                                             </button>
                                         </form>
@@ -112,7 +115,8 @@
                                                 </div>
                                             </div>
                                             <p class="empty-title text-heading mt-3">Tidak ada order antri</p>
-                                            <p class="empty-subtitle text-secondary mb-0">Semua order antri sudah disetujui.</p>
+                                            <p class="empty-subtitle text-secondary mb-0">Semua order antri sudah
+                                                disetujui.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -152,7 +156,8 @@
                                     <td>
                                         <div class="font-weight-medium text-heading mb-0">{{ $order->kode_order }}</div>
                                         <div class="small text-secondary d-flex align-items-center gap-1">
-                                            <i class="ti ti-user fs-4 text-muted"></i> Kasir: {{ optional($order->user)->name ?? 'Belum ditugaskan' }}
+                                            <i class="ti ti-user fs-4 text-muted"></i>
+                                            Kasir: {{ optional($order->user)->name ?? 'Belum ditugaskan' }}
                                         </div>
                                     </td>
                                     <td>
@@ -164,13 +169,15 @@
                                               <i class="ti ti-truck-delivery me-1 fs-3"></i> Delivery
                                             </span>
                                             <div class="mt-1">
-                                                <span class="badge bg-{{ $order->status_jemput_badge }}-lt text-{{ $order->status_jemput_badge }} rounded-pill px-2 py-1"
-                                                      style="font-size: 11px;">
+                                                <span
+                                                    class="badge bg-{{ $order->status_jemput_badge }}-lt text-{{ $order->status_jemput_badge }} rounded-pill px-2 py-1"
+                                                    style="font-size: 11px;">
                                                     {{ $order->status_jemput_label }}
                                                 </span>
                                             </div>
                                         @else
-                                            <span class="badge bg-secondary-lt text-secondary rounded-pill px-2.5 py-1 fw-medium">
+                                            <span
+                                                class="badge bg-secondary-lt text-secondary rounded-pill px-2.5 py-1 fw-medium">
                                               <i class="ti ti-building-store me-1 fs-3"></i> Datang Langsung
                                             </span>
                                         @endif
@@ -184,7 +191,8 @@
                                     <td class="text-secondary small">
                                         <div class="d-flex align-items-center gap-1">
                                             <i class="ti ti-clock fs-3 text-muted"></i>
-                                            <span class="{{ $order->estimasi_selesai->isPast() && $order->status !== 'diambil' ? 'text-danger fw-semibold' : '' }}">
+                                            <span
+                                                class="{{ $order->estimasi_selesai->isPast() && $order->status !== 'diambil' ? 'text-danger fw-semibold' : '' }}">
                                                 {{ $order->estimasi_selesai->format('d M Y') }}
                                             </span>
                                         </div>
@@ -193,17 +201,20 @@
                                         {{ $order->total_formatted }}
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ $order->status_badge }}-lt text-{{ $order->status_badge }} rounded-pill px-2.5 py-1 fw-medium text-capitalize">
+                                        <span
+                                            class="badge bg-{{ $order->status_badge }}-lt text-{{ $order->status_badge }} rounded-pill px-2.5 py-1 fw-medium text-capitalize">
                                             {{ $order->status_label }}
                                         </span>
                                     </td>
                                     <td>
                                         @if($order->status_bayar === 'lunas')
-                                            <span class="badge bg-success-lt text-success rounded-pill px-2.5 py-1 fw-medium">
+                                            <span
+                                                class="badge bg-success-lt text-success rounded-pill px-2.5 py-1 fw-medium">
                                               <i class="ti ti-check me-1 fs-3"></i> Lunas
                                             </span>
                                         @else
-                                            <span class="badge bg-danger-lt text-danger rounded-pill px-2.5 py-1 fw-medium">
+                                            <span
+                                                class="badge bg-danger-lt text-danger rounded-pill px-2.5 py-1 fw-medium">
                                               <i class="ti ti-alert-circle me-1 fs-3"></i> Belum Bayar
                                             </span>
                                         @endif
@@ -216,7 +227,8 @@
                                                 <i class="ti ti-eye fs-2"></i>
                                             </a>
                                             <a href="{{ route('orders.nota', $order) }}"
-                                               class="btn btn-sm btn-icon btn-outline-secondary" title="Cetak Nota" target="_blank"
+                                               class="btn btn-sm btn-icon btn-outline-secondary" title="Cetak Nota"
+                                               target="_blank"
                                                style="border-radius: 6px;">
                                                 <i class="ti ti-printer fs-2"></i>
                                             </a>
@@ -233,7 +245,8 @@
                                                 </div>
                                             </div>
                                             <p class="empty-title text-heading mt-3">Tidak ada order yang disetujui</p>
-                                            <p class="empty-subtitle text-secondary mb-0">Order akan muncul setelah disetujui kasir.</p>
+                                            <p class="empty-subtitle text-secondary mb-0">Order akan muncul setelah
+                                                disetujui kasir.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -291,7 +304,8 @@
                                         </div>
                                     @endif
                                 @else
-                                    <span class="badge bg-secondary-lt text-secondary rounded-pill px-2.5 py-1 fw-medium">
+                                    <span
+                                        class="badge bg-secondary-lt text-secondary rounded-pill px-2.5 py-1 fw-medium">
                                       <i class="ti ti-building-store me-1 fs-3"></i> Datang Langsung
                                     </span>
                                 @endif
@@ -339,7 +353,8 @@
                                         <i class="ti ti-eye fs-2"></i>
                                     </a>
                                     <a href="{{ route('orders.nota', $order) }}"
-                                       class="btn btn-sm btn-icon btn-outline-secondary" title="Cetak Nota" target="_blank"
+                                       class="btn btn-sm btn-icon btn-outline-secondary" title="Cetak Nota"
+                                       target="_blank"
                                        style="border-radius: 6px;">
                                         <i class="ti ti-printer fs-2"></i>
                                     </a>
